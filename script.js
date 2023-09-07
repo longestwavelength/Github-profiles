@@ -1,87 +1,93 @@
-const canvas = document.getElementById('canvas'); //Canvas API
-const increaseBtn = document.getElementById('increase')
-const decreaseBtn = document.getElementById('decrease')
-const sizeElem = document.getElementById('size')
-const colorBoard = document.getElementById('color')
-const clearElem = document.getElementById('clear')
-const ctx = canvas.getContext('2d');
+const APIurl = 'https://api.github.com/users/'
 
-let size = 20
-let isPressed = false
-let color = "black"
-let x 
-let y
+const main = document.getElementById('main')
 
-canvas.addEventListener('mousedown', (e) => {
-    isPressed = true
+const form = document.getElementById('form')
+const search = document.getElementById('search')
 
-    x = e.offsetX
-    y = e.offsetY
-})
 
-canvas.addEventListener('mouseup', (e) => {
-    isPressed = false
 
-    x = undefined
-    y = undefined
-})
-
-canvas.addEventListener('mousemove', (e) => {
-    if(isPressed){
-        const x2 = e.offsetX
-        const y2 = e.offsetY
-
-        drawCircle(x2, y2)
-        drawLine(x, y, x2, y2)
-
-        x = x2
-        y = y2
+async function getUser(username) {
+   try {
+    const { data } = await axios(APIurl + username)
+    userCard(data)
+    getRepos(username
+        )
+   } catch(error) {
+    if(error.response.status == 404){
+        errorCard('No User found')
     }
     
-})
-
-function updateSizeOnScreen() {
-    sizeElem.innerText = size
+   }
+    
 }
 
-function drawCircle(x, y) {
-    ctx.beginPath();
-    ctx.arc(x, y, size, 0, Math.PI*2, true)
-    ctx.fillStyle = color
-    ctx.fill()
-}
-
-function drawLine(x1, y1, x2, y2) {
-    ctx.beginPath();
-    ctx.moveTo(x1, y1)
-    ctx.lineTo(x2, y2)
-    ctx.strokeStyle = color
-    ctx.lineWidth = size * 2
-    ctx.stroke()
-}
-
-increaseBtn.addEventListener('click', (e) => {
-    size += 2
-    if(size > 50){
-        size = 50
+async function getRepos(username) {
+    try {
+        const { data } = await axios(APIurl + username + '/repos?sort=created')
+        addReposToCard(data)
+    } catch(error) {
+            errorCard('Problem fetching repos')
     }
+}
 
-    updateSizeOnScreen()
-})
+function userCard(user) {
+    const cardHTML = `
+    <div class="card">
+            <div>
+                <img src="${user.avatar_url}" alt="${user.name}" class="avatar">
+            </div>
+            <div class="user-info">
+                <h2>${user.name}</h2>
+                <p>${user.bio}</p>
+                <ul>
+                    <li>${user.followers} <strong>Followers</strong></li>
+                    <li>${user.following} <strong>Following</strong></li>
+                    <li>${user.public_repos} <strong>Repos</strong></li>
+                </ul>
 
-decreaseBtn.addEventListener('click', (e) => {
-    size -= 2
-    if(size < 2){
-        size = 2
+                <div id="repos">
+                   
+                </div>
+            </div>
+        </div>
+    `
+
+    main.innerHTML = cardHTML
+}
+
+function errorCard(message) {
+    const cardHTML = `
+    <div class="card">
+        <h1>${message}</h1>
+    </div>
+    `
+
+    main.innerHTML = cardHTML
+}
+
+function addReposToCard(repos) {
+    const reposEl = document.getElementById('repos')
+    
+    repos.slice(0, 5).forEach(repo => {
+        const repoEl = document.createElement('a')
+        repoEl.classList.add('repo')
+        repoEl.href = repo.html_url
+        repoEl.target = '_blank'
+        repoEl.innerText = repo.name
+
+        reposEl.appendChild(repoEl)
+    })
+}
+
+form.addEventListener('submit', (e) => {
+    e.preventDefault()
+
+    const user = search.value
+
+    if(user) {
+        getUser(user)
+
+        search.value = ''
     }
-
-    updateSizeOnScreen()
 })
-
-colorBoard.addEventListener('change', (e) =>
-    color = e.target.value
-)
-
-clearElem.addEventListener('click', () => ctx.clearRect(0, 0, canvas.width, canvas.height))
-
-

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400&display=swap');
 
 
 * {
@@ -6,42 +6,107 @@
 }
 
 body {
-    background-color: #f7f5f7;
-    font-family: 'Lato', sans-serif;
+    background-color: #D6A2E8;
+    color: white;
+    font-family: 'Poppins', sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100vh;
     margin: 0;
+    overflow: hidden;
 }
 
-canvas {
-    border: 2px solid orange;
+.user-form {
+    width: 100%;
+    max-width: 700px;
 }
 
-.toolbox {
-    background-color: orange;
-    border: 1.5px solid orange;
-    display: flex;
-    width: 603px;
-    padding: 1rem;
-}
-
-.toolbox > * {
-    background-color: white;
+.user-form input {
+    width: 100%;
+    display: block;
+    background-color: #d465ff;
     border: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-    height: 50px;
-    width: 50px;
-    margin: 0.25rem;
-    padding: 0.25rem;
-    cursor: pointer;
+    border-radius: 10px;
+    color: white;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    font-family: inherit;
+    font-size: 1 rem;
+    box-shadow: 0px 5px 10px rgba(154, 160, 184, 0.05), 0px 15px 40px rgba(0, 0, 0, 0.1);
 }
 
-.toolbox > *:last-child {
-    margin-left: auto;
+.user-form input::placeholder {
+    color: whitesmoke;
+}
+
+.user-form input:focus {
+    outline: none;
+}
+
+.card {
+    max-width: 900px;
+    background-color: #d465ff;
+    border-radius: 15px;
+    box-shadow: 0px 5px 10px rgba(154, 160, 184, 0.05), 0px 15px 40px rgba(0, 0, 0, 0.1);
+    display: flex;
+    padding: 3rem;
+    margin: 0 1.5rem;
+}
+
+.avatar {
+    border-radius: 50%;
+    border: 10px solid darkblue;
+    height: 150px;
+    width: 150px;
+}
+
+.user-info {
+    color: white;
+    margin-left: 2rem;
+}
+
+.user-info h2 {
+    margin-top: 0;
+}
+
+.user-info ul {
+    list-style-type: none;
+     display: flex;
+     justify-content: space-between;
+     padding: 0;
+     max-width: 400px;
+}
+
+.user-info li {
+    display: flex;
+    align-items: center;
+}
+
+.user-info ul li strong {
+    font-size: 0.9rem;
+    margin-left: 0.5rem;
+}
+
+.repo {
+    text-decoration: none;
+    color: white;
+    background-color: darkblue;
+    font-size: 0.7rem;
+    padding: 0.15rem 0.25rem;
+    margin-right: 0.35rem;
+    margin-bottom: 0.5rem;
+    display: inline-block;
+}
+
+@media(max-width:500px) {
+    .card {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .user-form {
+        max-width: 400px;
+    }
 }
